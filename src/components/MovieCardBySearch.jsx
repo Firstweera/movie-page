@@ -1,8 +1,8 @@
 import React from "react";
 import { HiStar } from "react-icons/hi";
 
-export const MovieCard = ({
-  getMovies,
+export const MovieCardBySearch = ({
+  getSearch,
   overviewToggle,
   updateToggleIndex,
   setOverviewToggle,
@@ -12,18 +12,18 @@ export const MovieCard = ({
   return (
     <div className="py-3 px-5">
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
-        {getMovies?.results.map((r, idx) => (
+        {getSearch?.results.map((r, idx) => (
           <div
             key={idx}
             className="cursor-pointer bg-secondary text-text rounded-md shadow-md "
-            onClick={() => {
-              updateToggleIndex(idx);
-            }}
+            onClick={() => updateToggleIndex(idx)}
           >
             <div>
               <img
-                src={`https://image.tmdb.org/t/p/w500${r.poster_path}`}
-                alt="posterMovie"
+                src={`https://image.tmdb.org/t/p/w500${
+                  r.poster_path ?? r.backdrop_path
+                }`}
+                alt={r.name ?? r.title}
                 className="rounded-t-md"
               />
             </div>
@@ -50,7 +50,9 @@ export const MovieCard = ({
                   <div className="lg:flex lg:space-x-5">
                     <div className="flex justify-center mb-5 lg:w-6/12">
                       <img
-                        src={`https://image.tmdb.org/t/p/original${r.backdrop_path}`}
+                        src={`https://image.tmdb.org/t/p/w500${
+                          r.backdrop_path ?? r.poster_path
+                        }`}
                         alt="posterMovie"
                         className="rounded-md"
                       />

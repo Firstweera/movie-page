@@ -1,33 +1,30 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { MovieCard } from "../components";
+import React from "react";
+import { MovieCard, Carousel } from "../components";
+import { useFetchMovie } from "../hooks";
 
-const Home = () => {
-  const [getMovies, setGetMovies] = useState();
+export const Home = () => {
+  const { getMovies, overviewToggle, setOverviewToggle, updateToggleIndex } =
+    useFetchMovie();
 
-  //-------------- getMovies --------------//
-  const getListOfMovies = async () => {
-    const result = await axios.get(
-      `https://api.themoviedb.org/3/trending/all/week?api_key=${
-        import.meta.env.VITE_MOVIE_API
-      }`
-    );
-    console.log("movies from Api", result.data);
-    setGetMovies(result.data);
-  };
-  useEffect(() => {
-    getListOfMovies();
-  }, []);
+  const top5Movies = getMovies?.results
+    .sort((a, b) => b.vote_average - a.vote_average)
+    .slice(0, 5);
 
-  //-------------------------------------//
+  console.log("top 5", top5Movies);
 
   return (
-    <div className="bg-[#DFD3D3] p-3 md:p-5">
-      <div className="flex justify-center">
-        <MovieCard getMovies={getMovies} />
+    <div className="mt-12 bg-background h-full">
+      <div className="pt-8">
+        <Carousel top5Movies={top5Movies} auto={true} interval={4000} />
+      </div>
+      <div className="mt-3 lg:flex lg:justify-center">
+        <MovieCard
+          getMovies={getMovies}
+          overviewToggle={overviewToggle}
+          updateToggleIndex={updateToggleIndex}
+          setOverviewToggle={setOverviewToggle}
+        />
       </div>
     </div>
   );
 };
-
-export default Home;
